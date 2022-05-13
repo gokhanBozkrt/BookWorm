@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct BookwormApp: App {
+    @StateObject private var dataController = DataController()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+        ContentView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }
+
+
+// .environment(\.managedObjectContext,dataController.container.viewContext)
