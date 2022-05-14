@@ -13,8 +13,9 @@ struct AddBookView: View {
     @State private var title = ""
     @State private var author = ""
     @State private var rating = 3
-    @State private var genre = ""
+    @State private var genre = "Mystery"
     @State private var review = ""
+    
     
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
 
@@ -32,11 +33,14 @@ struct AddBookView: View {
                 }
                 Section {
                     TextEditor(text: $review)
+                    RatingView(rating: $rating)
+                    /*
                     Picker("Rating", selection: $rating) {
                         ForEach(0..<6) {
                             Text(String($0))
                         }
                     }
+                    */
                 } header: {
                     Text("Write a review")
                 }
@@ -51,14 +55,21 @@ struct AddBookView: View {
                         newBook.rating = Int16(self.rating)
                         newBook.genre = self.genre
                         newBook.review = self.review
+                        newBook.recoderDate = Date.now
                         
                         try? moc.save()
                         dismiss()
                     }
-                }
+                }.disabled( sectionWordChecker() == false)
             }
             .navigationTitle("Add Book")
         }
+    }
+    func sectionWordChecker() -> Bool {
+        if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || author.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty  {
+            return false
+        }
+        return true
     }
 }
 
